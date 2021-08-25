@@ -26,7 +26,7 @@ public static class RotationalCipher
         return builder.ToString();
     }
 
-    private static int GetNewCharacter(int characterPosition, bool isLower)
+    private static char GetNewCharacter(int characterPosition, bool isLower)
         => isLower
             ? Alphabet[characterPosition]
             : char.ToUpper(Alphabet[characterPosition]);
