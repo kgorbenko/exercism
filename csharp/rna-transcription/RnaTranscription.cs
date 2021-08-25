@@ -1,37 +1,15 @@
-using System;
+using System.Linq;
 
 public static class RnaTranscription
 {
     public static string ToRna(string nucleotide)
-    {
-        var result = "";
-
-        foreach (char c in nucleotide)
-        {
-            switch (c)
-            {
-                case 'G':
-                    result += 'C';
-                    break;
-
-                case 'C':
-                    result += 'G';
-                    break;
-
-                case 'T':
-                    result += 'A';
-                    break;
-
-                case 'A':
-                    result += 'U';
-                    break;
-
-                default:
-                    result += c;
-                    break;
-
-            }
-        }
-        return result;
-    }
+        => new string(nucleotide.Select(x => x switch
+                                {
+                                    'G' => 'C',
+                                    'C' => 'G',
+                                    'T' => 'A',
+                                    'A' => 'U',
+                                    var num => num
+                                })
+                                .ToArray());
 }
