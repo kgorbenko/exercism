@@ -15,7 +15,7 @@ public static class Hamming
             return 0;
         }
 
-        return firstStrand.Where((x, i) => x != secondStrand[i])
-                          .Count();
+        return firstStrand.Zip(secondStrand)
+                          .Count(x => x.First != x.Second);
     }
 }
