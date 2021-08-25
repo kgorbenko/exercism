@@ -16,22 +16,17 @@ public enum Allergen
 
 public class Allergies
 {
-    private readonly int mask;
-    private readonly IEnumerable<Allergen> allAllergens;
+    private static readonly IEnumerable<Allergen> allAllergens =
+        Enum.GetValues(typeof(Allergen)).Cast<Allergen>();
+
+    private readonly Allergen mask;
 
     public Allergies(int mask)
     {
-        this.mask = mask;
-        allAllergens = Enum.GetValues(typeof(Allergen)).Cast<Allergen>();
+        this.mask = (Allergen) mask;
     }
 
-    public bool IsAllergicTo(Allergen allergen)
-    {
-        return ((Allergen)mask).HasFlag(allergen);
-    }
+    public bool IsAllergicTo(Allergen allergen) => mask.HasFlag(allergen);
 
-    public Allergen[] List()
-    {
-        return allAllergens.Where(IsAllergicTo).ToArray();
-    }
+    public Allergen[] List() => allAllergens.Where(IsAllergicTo).ToArray();
 }
