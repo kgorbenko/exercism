@@ -1,16 +1,16 @@
 using System;
+using System.Linq;
 
 public static class ArmstrongNumbers
 {
     public static bool IsArmstrongNumber(int number)
     {
-        double sum = 0;
-        var stringNumber = number.ToString();
+        var text = number.ToString();
+        var power = text.Length;
+        var sumOfPowers = text.Select(x => int.Parse($"{x}"))
+                              .Select(x => (int) Math.Pow(x, power))
+                              .Sum();
 
-        foreach (char c in stringNumber)
-        {
-            sum = sum + Math.Pow(int.Parse(c.ToString()), stringNumber.Length); 
-        }
-        return number == sum;
+        return number == sumOfPowers;
     }
 }
