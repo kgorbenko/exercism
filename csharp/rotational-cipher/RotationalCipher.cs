@@ -3,7 +3,6 @@ using System.Text;
 public static class RotationalCipher
 {
     private const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
-    private const int AlphabetLenght = 26;
 
     public static string Rotate(string text, int shiftKey)
     {
@@ -19,10 +18,7 @@ public static class RotationalCipher
 
             var shiftedIndex = Alphabet.IndexOf(char.ToLower(character)) + shiftKey;
             var newCharacterPosition = RemoveRedundantRotates(shiftedIndex);
-
-            var cypheredCharacter = char.IsLower(character)
-                ? Alphabet[newCharacterPosition]
-                : char.ToUpper(Alphabet[newCharacterPosition]);
+            var cypheredCharacter = GetNewCharacter(newCharacterPosition, char.IsLower(character));
 
             builder.Append(cypheredCharacter);
         }
@@ -30,10 +26,15 @@ public static class RotationalCipher
         return builder.ToString();
     }
 
-    private static int RemoveRedundantRotates(int shift)
-    {
-        return shift - AlphabetLenght * GetNumberOfRotates();
+    private static int GetNewCharacter(int characterPosition, bool isLower)
+        => isLower
+            ? Alphabet[characterPosition]
+            : char.ToUpper(Alphabet[characterPosition]);
 
-        int GetNumberOfRotates() => shift / AlphabetLenght;
+    private static int RemoveRedundantRotates(int index)
+    {
+        int GetNumberOfRotates() => index / Alphabet.Length;
+
+        return index - Alphabet.Length * GetNumberOfRotates();
     }
 }
