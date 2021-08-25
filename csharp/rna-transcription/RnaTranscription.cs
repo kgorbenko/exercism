@@ -1,8 +1,8 @@
 using System;
 
-public static class Complement
+public static class RnaTranscription
 {
-    public static string OfDna(string nucleotide)
+    public static string ToRna(string nucleotide)
     {
         var result = "";
 
@@ -29,8 +29,8 @@ public static class Complement
                 default:
                     result += c;
                     break;
-                    
-            }    
+
+            }
         }
         return result;
     }
