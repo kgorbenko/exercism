@@ -1,4 +1,6 @@
-public struct Clock
+using System;
+
+public readonly struct Clock
 {
     private const int MinutesInHour = 60;
     private const int HoursInDay = 24;
@@ -24,4 +26,19 @@ public struct Clock
         => new Clock(Hours, Minutes - minutesToSubtract);
 
     public override string ToString() => $"{Hours:00}:{Minutes:00}";
+
+    public bool Equals(Clock other)
+    {
+        return Hours == other.Hours && Minutes == other.Minutes;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Clock other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Hours, Minutes);
+    }
 }
