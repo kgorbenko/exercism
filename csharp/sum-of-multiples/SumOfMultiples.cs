@@ -1,25 +1,18 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class SumOfMultiples
 {
     public static int Sum(IEnumerable<int> multiples, int max)
     {
-        var sum = 0;
-        var invalidNumbers = new List<int>();
+        IEnumerable<int> GetMultiples(int multiple, int limit) =>
+            Enumerable.Range(start: 1, limit / multiple)
+                      .Select(x => x * multiple);
 
-        foreach (var c in multiples)
-        {
-            for (var i = c; i < max; i += c)
-            {
-                if ((i % c) == 0 && i < max && !invalidNumbers.Contains(i))
-                {
-                    invalidNumbers.Add(i);
-                    sum += i;
-                }
-            }
-        }
-
-        return sum;
+        return multiples.Where(x => x > 0)
+                        .Select(x => GetMultiples(x, max - 1))
+                        .SelectMany(x => x)
+                        .Distinct()
+                        .Sum();
     }
 }
