@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class SumOfMultiples
 {
-    public static int To(IEnumerable<int> multiples, int max)
+    public static int Sum(IEnumerable<int> multiples, int max)
     {
         var sum = 0;
         var invalidNumbers = new List<int>();
