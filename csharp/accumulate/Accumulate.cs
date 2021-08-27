@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public static class AccumulateExtensions
 {
-    public static IEnumerable<Outcome> Accumulate<Income, Outcome>(this IEnumerable<Income> collection, Func<Income, Outcome> func)
+    public static IEnumerable<TU> Accumulate<T, TU>(this IEnumerable<T> collection, Func<T, TU> func)
     {
         foreach (var income in collection)
-
+        {
             yield return func(income);
+        }
     }
 }
