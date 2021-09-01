@@ -4,17 +4,23 @@ public static class CollatzConjecture
 {
     public static int Steps(int number)
     {
-        int numberOfSteps = 0;
-
-        if (number <= 0) throw new ArgumentException();
-
-        while (number != 1)
+        if (number <= 0)
         {
-            if (number % 2 == 0) number = number / 2;
-            else number = number * 3 + 1;
-
-            numberOfSteps++;
+            throw new ArgumentOutOfRangeException(nameof(number));
         }
-        return numberOfSteps;
+
+        return Count(number, steps: 0);
+    }
+
+    private static int Count(int number, int steps)
+    {
+        if (number == 1)
+        {
+            return steps;
+        }
+
+        return number % 2 == 0
+            ? Count(number / 2, steps + 1)
+            : Count(number * 3 + 1, steps + 1);
     }
 }
