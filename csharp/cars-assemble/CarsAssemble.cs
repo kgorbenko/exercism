@@ -4,11 +4,11 @@ static class AssemblyLine
 {
     private const int CarsPerHour = 221;
 
-    public static double ProductionRatePerHour(int speed) =>
-        CarsPerHour * speed * GetSuccessRate(speed);
+    public static double ProductionRatePerHour(int speed)
+        => CarsPerHour * speed * GetSuccessRate(speed);
 
-    public static int WorkingItemsPerMinute(int speed) =>
-        (int) ProductionRatePerHour(speed) / 60;
+    public static int WorkingItemsPerMinute(int speed)
+        => (int) ProductionRatePerHour(speed) / 60;
 
     private static double GetSuccessRate(int speed)
     {
