@@ -13,7 +13,7 @@ static class SavingsAccount
     }
 
     public static decimal AnnualBalanceUpdate(decimal balance)
-        => balance + balance * (decimal)InterestRate(balance) * 0.01m * Math.Sign(balance);
+        => balance + balance * Math.Sign(balance) * (decimal)InterestRate(balance) / 100;
 
     public static int YearsBeforeDesiredBalance(decimal balance, decimal targetBalance)
         => CalculateYears(balance, targetBalance, years: 0);
