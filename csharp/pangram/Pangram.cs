@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 public static class Pangram
@@ -7,6 +6,6 @@ public static class Pangram
     {
         var upperCase = input.ToUpper();
 
-        return Enumerable.Range(65, 26).All(index => upperCase.Contains((char) index));
-    }   
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".All(index => upperCase.Contains(index));
+    }
 }
