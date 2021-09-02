@@ -1,8 +1,8 @@
 using System;
 
-public static class Squares
+public static class DifferenceOfSquares
 {
-    public static int SquareOfSums(int max)
+    public static int CalculateSquareOfSum(int max)
     {
         int i = 1;
         int sum = 0;
@@ -14,7 +14,7 @@ public static class Squares
         return sum * sum;
     }
 
-    public static int SumOfSquares(int max)
+    public static int CalculateSumOfSquares(int max)
     {
         int i = 1;
         int sum = 0;
@@ -26,8 +26,8 @@ public static class Squares
         return sum;
     }
 
-    public static int DifferenceOfSquares(int max)
+    public static int CalculateDifferenceOfSquares(int max)
     {
-        return SquareOfSums(max) - SumOfSquares(max); 
+        return CalculateSquareOfSum(max) - CalculateSumOfSquares(max);
     }
 }
