@@ -1,17 +1,15 @@
-using System;
 using System.Linq;
 
 static class LogLine
 {
-    private static readonly string[] availableLogLevels = { "info", "warning", "error" };
-
     private static (string Level, string Message) Parse(string logLine)
     {
-        var level = availableLogLevels.First(x => logLine.Contains($"[{x}]", StringComparison.OrdinalIgnoreCase));
-        var message = logLine.Replace(oldValue: $"[{level}]:", newValue: "", StringComparison.OrdinalIgnoreCase)
-                             .Trim();
+        var parts = logLine.Split(":")
+                           .Select(x => x.Trim('[', ']'))
+                           .Select(x => x.Trim())
+                           .ToArray();
 
-        return (Level: level, Message: message);
+        return (Level: parts[0].ToLower(), Message: parts[1]);
     }
 
     public static string Message(string logLine)
@@ -24,6 +22,6 @@ static class LogLine
     {
         var (level, message) = Parse(logLine);
 
-        return $"{message} ({level.ToLower()})";
+        return $"{message} ({level})";
     }
 }
