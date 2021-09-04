@@ -1,22 +1,14 @@
 using System;
 
-public class BinarySearch
+public static class BinarySearch
 {
-    private int[] sequence;
-    private int firstIndex;
-    private int lastIndex;
-
-    public BinarySearch(int[] input)
-    {
-        sequence = input;
-        firstIndex = 0;
-        lastIndex = input.Length - 1;
-    }
-
-    public int Find(int value)
+    public static int Find(int[] sequence, int value)
     {
         if (sequence.Length == 0) return -1;
         int index = sequence.Length / 2;
+
+        var firstIndex = 0;
+        var lastIndex = sequence.Length - 1;
 
         while (firstIndex <= lastIndex)
         {
