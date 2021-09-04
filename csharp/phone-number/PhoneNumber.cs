@@ -25,8 +25,7 @@ public static class PhoneNumber
 
     public static string Clean(string phoneNumber)
     {
-        return string.Join("", phoneNumber.Where(char.IsNumber)
-                                          .Select(c => c.ToString()))
+        return string.Join("", phoneNumber.Where(char.IsNumber))
                      .RemoveCountryCode()
                      .ValidateLength()
                      .ValidateAreaCode()
