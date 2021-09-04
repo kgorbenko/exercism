@@ -1,21 +1,35 @@
 using System;
 using System.Linq;
 
-public class PhoneNumber
+public static class PhoneNumber
 {
+    private static string RemoveCountryCode(this string number)
+        => number.StartsWith("1")
+            ? number.Remove(startIndex: 0, count: 1)
+            : number;
+
+    private static string ValidateLength(this string number)
+        => number.Length != 10
+            ? throw new ArgumentException(message: null, nameof(number))
+            : number;
+
+    private static string ValidateAreaCode(this string number)
+        => number[index: 0] is '0' or '1'
+            ? throw new ArgumentException()
+            : number;
+
+    private static string ValidateExchangeCode(this string number)
+        => number[index: 3] is '0' or '1'
+            ? throw new ArgumentException()
+            : number;
+
     public static string Clean(string phoneNumber)
     {
-        phoneNumber = string.Join("", phoneNumber.Where(c => char.IsNumber(c)).Select(c => c.ToString()));
-
-        if (phoneNumber.StartsWith('1')) phoneNumber = phoneNumber.Remove(0, 1);
-        if (phoneNumber.Length > 10 || phoneNumber.Length < 10) throw new ArgumentException();
-
-        if (phoneNumber[0] == '0' ||
-            phoneNumber[0] == '1' ||
-            phoneNumber[3] == '0' ||
-            phoneNumber[3] == '1')
-            throw new ArgumentException();
-
-        return phoneNumber;
+        return string.Join("", phoneNumber.Where(char.IsNumber)
+                                          .Select(c => c.ToString()))
+                     .RemoveCountryCode()
+                     .ValidateLength()
+                     .ValidateAreaCode()
+                     .ValidateExchangeCode();
     }
 }
