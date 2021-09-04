@@ -23,12 +23,10 @@ public static class PhoneNumber
             ? throw new ArgumentException()
             : number;
 
-    public static string Clean(string phoneNumber)
-    {
-        return string.Join("", phoneNumber.Where(char.IsNumber))
-                     .RemoveCountryCode()
-                     .ValidateLength()
-                     .ValidateAreaCode()
-                     .ValidateExchangeCode();
-    }
+    public static string Clean(string phoneNumber) =>
+        string.Join("", phoneNumber.Where(char.IsNumber))
+              .RemoveCountryCode()
+              .ValidateLength()
+              .ValidateAreaCode()
+              .ValidateExchangeCode();
 }
