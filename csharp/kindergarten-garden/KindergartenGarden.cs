@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum Plant
 {
@@ -11,33 +12,28 @@ public enum Plant
 
 public class KindergartenGarden
 {
-    private string diagram;
-    private Dictionary<char, Plant> PlantMap;
+    private readonly string diagram;
 
     public KindergartenGarden(string diagram)
     {
-        this.diagram = diagram;
-        PlantMap = new Dictionary<char, Plant>
-        {
-            {'G', Plant.Grass }, {'C', Plant.Clover }, {'R', Plant.Radishes }, {'V', Plant.Violets }
-        };
+        this.diagram = diagram ?? throw new ArgumentNullException(nameof(diagram));
     }
+
+    private static Plant GetPlant(char plant)
+        => plant switch {
+            'G' => Plant.Grass,
+            'C' => Plant.Clover,
+            'R' => Plant.Radishes,
+            'V' => Plant.Violets,
+            _ => throw new ArgumentException("Unknown plant.")
+        };
 
     public IEnumerable<Plant> Plants(string student)
     {
-        int numberInRow = 0;
+        var offset = (student[0] - 'A') * 2;
 
-        for (int i = 65; i <= 76; i++)
-            if (student.StartsWith((char)i)) numberInRow = i - 65;
-
-        string currentDiagram = diagram.Substring(numberInRow * 2, 2) + 
-                                diagram.Substring(diagram.Length / 2 + numberInRow * 2 + 1, 2);
-
-        Plant subPlant;
-        for (int i = 0; i < 4; i++)
-        {
-            PlantMap.TryGetValue(currentDiagram[i], out subPlant);
-            yield return subPlant;
-        }
+        return diagram.Split(separator: '\n')
+                      .SelectMany(x => x[offset..(offset + 2)])
+                      .Select(GetPlant);
     }
 }
