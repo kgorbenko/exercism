@@ -1,24 +1,30 @@
-using System;
-
 public static class BinarySearch
 {
-    public static int Find(int[] sequence, int value)
+    public static int Find(int[] input, int value)
     {
-        if (sequence.Length == 0) return -1;
-        int index = sequence.Length / 2;
+        if (input.Length == 0)
+        {
+            return -1;
+        }
 
         var firstIndex = 0;
-        var lastIndex = sequence.Length - 1;
+        var lastIndex = input.Length - 1;
 
         while (firstIndex <= lastIndex)
         {
-            index = (lastIndex + firstIndex) / 2;
+            var currentIndex = (lastIndex + firstIndex) / 2;
+            var comparer = value.CompareTo(input[currentIndex]);
 
-            int comparer = value.CompareTo(sequence[index]);
-            if (comparer == 0) return index;
-            if (comparer < 0) lastIndex = index - 1;
-            if (comparer > 0) firstIndex = index + 1;
+            if (comparer == 0)
+            {
+                return currentIndex;
+            }
+
+            (firstIndex, lastIndex) = comparer < 0
+                ? (firstIndex, currentIndex - 1)
+                : (currentIndex + 1, lastIndex);
         }
+
         return -1;
     }
 }
