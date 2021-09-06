@@ -19,18 +19,18 @@ public class KindergartenGarden
         this.diagram = diagram ?? throw new ArgumentNullException(nameof(diagram));
     }
 
-    private static Plant GetPlant(char plant)
-        => plant switch {
-            'G' => Plant.Grass,
-            'C' => Plant.Clover,
-            'R' => Plant.Radishes,
-            'V' => Plant.Violets,
-            _ => throw new ArgumentException("Unknown plant.")
-        };
-
     public IEnumerable<Plant> Plants(string student)
     {
         var offset = (student[0] - 'A') * 2;
+
+        static Plant GetPlant(char plant)
+            => plant switch {
+                'G' => Plant.Grass,
+                'C' => Plant.Clover,
+                'R' => Plant.Radishes,
+                'V' => Plant.Violets,
+                _ => throw new ArgumentException("Unknown plant.")
+            };
 
         return diagram.Split(separator: '\n')
                       .SelectMany(x => x[offset..(offset + 2)])
