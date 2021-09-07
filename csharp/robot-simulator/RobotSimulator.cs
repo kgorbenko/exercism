@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum Direction
 {
@@ -11,43 +12,49 @@ public enum Direction
 
 public class RobotSimulator
 {
-    public Direction Direction { get; private set; }
-
     public int X { get; private set; }
 
     public int Y { get; private set; }
 
-    private static LinkedList<Direction> tableOfTurns;
+    public Direction Direction { get; private set; }
+
+    private static readonly LinkedList<Direction> tableOfTurns = new(Enum.GetValues<Direction>());
 
     public RobotSimulator(Direction direction, int x, int y)
     {
         Direction = direction;
         X = x;
         Y = y;
-
-        var nodes = new Direction[] {Direction.North, Direction.East, Direction.South, Direction.West };
-        tableOfTurns = new LinkedList<Direction>(nodes);
     }
 
     public void Move(string instructions)
     {
-        if (string.IsNullOrWhiteSpace(instructions)) throw new ArgumentNullException(nameof(instructions));
+        if (string.IsNullOrWhiteSpace(instructions))
+        {
+            throw new ArgumentNullException(nameof(instructions));
+        }
 
         foreach (var character in instructions)
+        {
             switch (character)
             {
                 case 'A': Advance(); break;
                 case 'R': TurnRight(); break;
                 case 'L': TurnLeft(); break;
             }
+        }
     }
 
     private void Advance()
     {
-        if (Direction == Direction.North) Y += 1;
-        if (Direction == Direction.South) Y -= 1;
-        if (Direction == Direction.East)  X += 1;
-        if (Direction == Direction.West)  X -= 1;
+        switch (Direction)
+        {
+            case Direction.North: Y += 1; break;
+            case Direction.South: Y -= 1; break;
+            case Direction.East: X += 1; break;
+            case Direction.West: X -= 1; break;
+            default: throw new ArgumentOutOfRangeException();
+        }
     }
 
     private void TurnRight()
