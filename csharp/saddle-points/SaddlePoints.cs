@@ -16,7 +16,7 @@ public static class SaddlePoints
                      .Select(_ => Enumerable.Range(0, GetRowCount(matrix)))
                      .Select((x, i) => x.Select(j => matrix[j, i]));
 
-    private static IEnumerable<(int i, int j)> GetValues(int[,] matrix)
+    private static IEnumerable<(int i, int j)> GetIndexes(int[,] matrix)
         => Enumerable.Range(0, GetRowCount(matrix))
                      .SelectMany(x => Enumerable.Range(0, GetColumnCount(matrix)).Select(y => (x, y)));
 
@@ -25,7 +25,7 @@ public static class SaddlePoints
         var maxValuesInRows = GetRows(matrix).Select(x => x.Max()).ToArray();
         var minValuesInColumns = GetColumns(matrix).Select(x => x.Min()).ToArray();
 
-        return GetValues(matrix).Where(x => maxValuesInRows[x.i] == minValuesInColumns[x.j])
+        return GetIndexes(matrix).Where(x => maxValuesInRows[x.i] == minValuesInColumns[x.j])
                                 .Select(x => (x.i + 1, x.j + 1));
     }
 }
