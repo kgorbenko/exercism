@@ -2,33 +2,29 @@ using System;
 
 public class BankAccount
 {
+    private decimal balance;
+    private readonly object balanceLock = new();
     private bool isAccountOpen;
-    private float balance;
 
-    public void Open()
-    {
-        isAccountOpen = true;
-    }
+    public void Open() => isAccountOpen = true;
 
-    public void Close()
-    {
-        isAccountOpen = false;
-    }
+    public void Close() => isAccountOpen = false;
 
-    public float Balance
+    public decimal Balance
+        => isAccountOpen
+            ? balance
+            : throw new InvalidOperationException("Cannot get balance of closed account.");
+
+    public void UpdateBalance(decimal change)
     {
-        get
+        if (!isAccountOpen)
         {
-            if (isAccountOpen)
-                return balance;
-
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Cannot update balance of closed account.");
         }
-    }
 
-    public void UpdateBalance(float change)
-    {
-        if (isAccountOpen)
+        lock (balanceLock)
+        {
             balance += change;
+        }
     }
 }
