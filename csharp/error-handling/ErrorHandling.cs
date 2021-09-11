@@ -2,10 +2,7 @@
 
 public static class ErrorHandling
 {
-    public static void HandleErrorByThrowingException()
-    {
-        throw new Exception();
-    }
+    public static void HandleErrorByThrowingException() => throw new Exception();
 
     public static int? HandleErrorByReturningNullableType(string input)
     {
@@ -23,8 +20,7 @@ public static class ErrorHandling
     {
         try
         {
-            result = int.Parse(input);
-            return true;
+            return int.TryParse(input, out result);
         }
         catch
         {
@@ -39,10 +35,10 @@ public static class ErrorHandling
         {
             throw new Exception();
         }
-        catch(Exception e)
+        catch(Exception)
         {
             disposableObject.Dispose();
-            throw e;
+            throw;
         }
     }
 }
