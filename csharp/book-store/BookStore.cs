@@ -3,18 +3,18 @@ using System.Linq;
 
 public static class BookStore
 {
-    private const double BookPrice = 8;
+    private const decimal BookPrice = 8m;
 
-    private static readonly Dictionary<int, double> discounts = new Dictionary<int, double>
+    private static readonly Dictionary<int, decimal> discounts = new Dictionary<int, decimal>
     {
-        {1, 1.0 },
-        {2, 0.95},
-        {3, 0.90},
-        {4, 0.80},
-        {5, 0.75}
+        {1, 1.0m },
+        {2, 0.95m },
+        {3, 0.90m },
+        {4, 0.80m },
+        {5, 0.75m }
     };
 
-    public static double Total(IEnumerable<int> books)
+    public static decimal Total(IEnumerable<int> books)
     {
         if (books.Count() == 0) return 0;
 
@@ -26,12 +26,12 @@ public static class BookStore
     private static IEnumerable<int[]> GetAllGroups(IEnumerable<int> books)
     {
         var groups = new List<int[]>();
-        
+
         for (int i = 1; i <= 5; i++)
         {
             var singleGroup = SortBooksByCount(books);
             var lengths = new List<int>();
-            
+
             while (singleGroup.Count() != 0)
             {
                 var uniqueBooks = singleGroup.Distinct().Take(i);
@@ -48,7 +48,7 @@ public static class BookStore
     private static IEnumerable<int> RemoveBooks(this IEnumerable<int> collection, IEnumerable<int> toRemove)
     {
         var collectionList = collection.ToList();
-        
+
         foreach (var book in toRemove)
             collectionList.Remove(book);
 
@@ -60,6 +60,6 @@ public static class BookStore
             .OrderByDescending(x => x.Count())
             .SelectMany(x => x);
 
-    private static double GetGroupPrice(IEnumerable<int> groupsLengths) 
-        => groupsLengths.Sum(length => BookPrice * length * discounts[length]); 
+    private static decimal GetGroupPrice(IEnumerable<int> groupsLengths)
+        => groupsLengths.Sum(length => BookPrice * length * discounts[length]);
 }
