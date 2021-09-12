@@ -5,60 +5,59 @@ public static class BookStore
 {
     private const decimal BookPrice = 8m;
 
-    private static readonly Dictionary<int, decimal> discounts = new Dictionary<int, decimal>
-    {
-        {1, 1.0m },
-        {2, 0.95m },
-        {3, 0.90m },
-        {4, 0.80m },
-        {5, 0.75m }
+    private static readonly Dictionary<int, decimal> discounts = new() {
+        { 1, 1.0m },
+        { 2, 0.95m },
+        { 3, 0.90m },
+        { 4, 0.80m },
+        { 5, 0.75m }
     };
 
     public static decimal Total(IEnumerable<int> books)
+        => books.Any()
+            ? GetGroupLengths(books.ToArray()).Select(GetGroupPrice).Min()
+            : 0;
+
+    private static IEnumerable<int[]> GetGroupLengths(IEnumerable<int> books)
+        => Enumerable.Range(1, discounts.Count)
+                     .Select(maxGroupCount => GetGroups(books.SortByCount(), maxGroupCount)
+                                              .Select(x => x.Length)
+                                              .ToArray());
+
+    private static IEnumerable<int[]> GetGroups(IEnumerable<int> books, int maxGroupCount)
     {
-        if (books.Count() == 0) return 0;
-
-        var groups = GetAllGroups(books);
-
-        return Enumerable.Min(groups.Select(group => GetGroupPrice(group)));
-    }
-
-    private static IEnumerable<int[]> GetAllGroups(IEnumerable<int> books)
-    {
-        var groups = new List<int[]>();
-
-        for (int i = 1; i <= 5; i++)
+        if (!books.Any())
         {
-            var singleGroup = SortBooksByCount(books);
-            var lengths = new List<int>();
-
-            while (singleGroup.Count() != 0)
-            {
-                var uniqueBooks = singleGroup.Distinct().Take(i);
-                singleGroup = singleGroup.RemoveBooks(uniqueBooks);
-                lengths.Add(uniqueBooks.Count());
-            }
-
-            groups.Add(lengths.ToArray());
+            return Enumerable.Empty<int[]>();
         }
 
-        return groups;
+        var group = GetNextGroup(books, maxGroupCount).ToArray();
+
+        return new[] { group }.Concat(GetGroups(books.Remove(group), maxGroupCount));
     }
 
-    private static IEnumerable<int> RemoveBooks(this IEnumerable<int> collection, IEnumerable<int> toRemove)
+    private static IEnumerable<int> Remove(this IEnumerable<int> books, IEnumerable<int> toRemove)
     {
-        var collectionList = collection.ToList();
+        var list = books.ToList();
 
-        foreach (var book in toRemove)
-            collectionList.Remove(book);
+        foreach (var itemToRemove in toRemove)
+        {
+            list.Remove(itemToRemove);
+        }
 
-        return collectionList;
+        return list;
     }
 
-    private static IEnumerable<int> SortBooksByCount(IEnumerable<int> books)
+    private static IEnumerable<int> SortByCount(this IEnumerable<int> books)
         => books.GroupBy(x => x)
-            .OrderByDescending(x => x.Count())
-            .SelectMany(x => x);
+                .OrderByDescending(x => x.Count())
+                .SelectMany(x => x);
+
+    private static IEnumerable<int> GetNextGroup(IEnumerable<int> books, int maxGroupCount)
+        => books.GroupBy(x => x)
+                .Where(group => group.Any())
+                .Take(maxGroupCount)
+                .Select(x => x.Key);
 
     private static decimal GetGroupPrice(IEnumerable<int> groupsLengths)
         => groupsLengths.Sum(length => BookPrice * length * discounts[length]);
