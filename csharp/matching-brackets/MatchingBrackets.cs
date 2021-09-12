@@ -26,22 +26,30 @@ public static class MatchingBrackets
         var bracketsStack = new Stack<char>();
         var allBrackets = GetOpeningBrackets().Concat(GetClosingBrackets());
 
-        foreach (var character in input.Where(x => allBrackets.Contains(x)))
-        {
-            if (!character.IsOpening())
-            {
-                if (!bracketsStack.TryPeek(out var opening) || GetOpeningBracket(character) != opening)
-                {
-                    return false;
-                }
+        return IsPaired(new string(input.Where(allBrackets.Contains).ToArray()), bracketsStack);
+    }
 
-                bracketsStack.Pop();
-            } else
-            {
-                bracketsStack.Push(character);
-            }
+    private static bool IsPaired(string input, Stack<char> stack)
+    {
+        if (input.Length == 0)
+        {
+            return !stack.Any();
         }
 
-        return !bracketsStack.Any();
+        var bracket = input[0];
+
+        if (bracket.IsOpening())
+        {
+            stack.Push(bracket);
+            return IsPaired(input[1..], stack);
+        }
+
+        if (stack.TryPeek(out var opening) && GetOpeningBracket(bracket) == opening)
+        {
+            stack.Pop();
+            return IsPaired(input[1..], stack);
+        }
+
+        return false;
     }
 }
