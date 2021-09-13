@@ -15,41 +15,32 @@ public static class MatchingBrackets
     private static IEnumerable<char> GetOpeningBrackets()
         => brackets.Select(x => x.Opening);
 
+    private static IEnumerable<char> GetClosingBrackets()
+        => brackets.Select(x => x.Closing);
+
     private static bool IsOpening(this char bracket)
         => GetOpeningBrackets().Contains(bracket);
 
-    private static IEnumerable<char> GetClosingBrackets()
-        => brackets.Select(x => x.Closing).ToArray();
 
     public static bool IsPaired(string input)
     {
         var bracketsStack = new Stack<char>();
         var allBrackets = GetOpeningBrackets().Concat(GetClosingBrackets());
 
-        return IsPaired(new string(input.Where(allBrackets.Contains).ToArray()), bracketsStack);
-    }
-
-    private static bool IsPaired(string input, Stack<char> stack)
-    {
-        if (input.Length == 0)
+        foreach (var character in input.Where(x => allBrackets.Contains(x)))
         {
-            return !stack.Any();
+            if (character.IsOpening())
+            {
+                bracketsStack.Push(character);
+                continue;
+            }
+
+            if (!bracketsStack.TryPop(out var opening) || opening != GetOpeningBracket(character))
+            {
+                return false;
+            }
         }
 
-        var bracket = input[0];
-
-        if (bracket.IsOpening())
-        {
-            stack.Push(bracket);
-            return IsPaired(input[1..], stack);
-        }
-
-        if (stack.TryPeek(out var opening) && GetOpeningBracket(bracket) == opening)
-        {
-            stack.Pop();
-            return IsPaired(input[1..], stack);
-        }
-
-        return false;
+        return !bracketsStack.Any();
     }
 }
