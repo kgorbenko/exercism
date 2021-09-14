@@ -2,9 +2,9 @@ public static class PhoneNumber
 {
     public static (bool IsNewYork, bool IsFake, string LocalNumber) Analyze(string phoneNumber)
     {
-        var parts = phoneNumber.Split("-");
+        var (dialingCode, prefixCode, localCode) = (phoneNumber[..3], phoneNumber[4..7], phoneNumber[8..]);
 
-        return (parts[0] == "212", parts[1] == "555", parts[2]);
+        return (dialingCode == "212", prefixCode == "555", localCode);
     }
 
     public static bool IsFake((bool IsNewYork, bool IsFake, string LocalNumber) phoneNumberInfo)
