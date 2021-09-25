@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 public static class BookStore
@@ -42,33 +43,29 @@ public static class BookStore
 
     private static IEnumerable<int[]> GetGroups(this IEnumerable<int> books, int maxGroupCount)
     {
-        var booksArray = books.ToArray();
-
-        if (!booksArray.Any())
+        if (!books.Any())
         {
             return Enumerable.Empty<int[]>();
         }
 
-        var group = GetNextGroup(booksArray, maxGroupCount).ToArray();
+        var (group, remainingBooks) = GetNextGroup(books, maxGroupCount);
 
-        return new[] { group }.Concat(GetGroups(booksArray.RemoveOnce(group), maxGroupCount));
+        return new[] { group }.Concat(remainingBooks.GetGroups(maxGroupCount));
     }
 
-    private static IEnumerable<int> RemoveOnce(this IEnumerable<int> books, IEnumerable<int> toRemove)
+    private static (int[] Group, int[] RemainingBooks) GetNextGroup(IEnumerable<int> books, int maxGroupCount)
     {
-        var list = new List<int>(books);
+        var groups = books.GroupBy(x => x).Where(group => group.Any()).ToArray();
+        var takenBooks = groups.Take(maxGroupCount).ToArray();
+        var takenKeys = takenBooks.Select(x => x.Key).ToArray();
 
-        foreach (var itemToRemove in toRemove)
-        {
-            list.Remove(itemToRemove);
-        }
+        int[] GetRemainingBooks() =>
+            groups.Where(x => !takenKeys.Contains(x.Key))
+                  .Concat(takenBooks.Select(x => x.Skip(1)))
+                  .SelectMany(x => x)
+                  .SortByCount()
+                  .ToArray();
 
-        return list;
+        return (Group: takenKeys, RemainingBooks: GetRemainingBooks());
     }
-
-    private static IEnumerable<int> GetNextGroup(IEnumerable<int> books, int maxGroupCount)
-        => books.GroupBy(x => x)
-                .Where(group => group.Any())
-                .Take(maxGroupCount)
-                .Select(x => x.Key);
 }
