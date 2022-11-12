@@ -7,6 +7,6 @@ public static class PhoneNumber
         return (dialingCode == "212", prefixCode == "555", localCode);
     }
 
-    public static bool IsFake((bool IsNewYork, bool IsFake, string LocalNumber) phoneNumberInfo)
-        => phoneNumberInfo.IsFake;
+    public static bool IsFake((bool IsNewYork, bool IsFake, string LocalNumber) phoneNumberInfo) =>
+        phoneNumberInfo.IsFake;
 }
