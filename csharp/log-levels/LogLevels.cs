@@ -1,6 +1,6 @@
 using System.Linq;
 
-static class LogLine
+public static class LogLine
 {
     private static (string Level, string Message) Parse(string logLine)
     {
