@@ -1,16 +1,16 @@
 using System;
 
-static class AssemblyLine
+public static class AssemblyLine
 {
     private const int CarsPerHour = 221;
 
     public static double ProductionRatePerHour(int speed)
-        => CarsPerHour * speed * GetSuccessRate(speed);
+        => CarsPerHour * speed * SuccessRate(speed);
 
     public static int WorkingItemsPerMinute(int speed)
         => (int) ProductionRatePerHour(speed) / 60;
 
-    private static double GetSuccessRate(int speed)
+    public static double SuccessRate(int speed)
     {
         return speed switch {
             0    => 0,
