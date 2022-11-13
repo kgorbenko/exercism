@@ -1,7 +1,6 @@
 using System.Linq;
 
 public class BirdCount {
-    private static readonly int[] lastWeekBirds = { 0, 2, 5, 3, 7, 8, 4 };
     private readonly int[] birdsPerDay;
 
     public BirdCount(int[] birdsPerDay)
@@ -15,7 +14,7 @@ public class BirdCount {
     }
 
     public static int[] LastWeek() =>
-        lastWeekBirds;
+        new[] { 0, 2, 5, 3, 7, 8, 4 };
 
     public int Today() =>
         birdsPerDay.Last();
