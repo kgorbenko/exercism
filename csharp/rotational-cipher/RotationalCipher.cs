@@ -1,40 +1,31 @@
 using System.Text;
+using System.Linq;
 
 public static class RotationalCipher
 {
     private const string Alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-    public static string Rotate(string text, int shiftKey)
+    private static char CypherCharacter(char character, int shiftKey)
     {
-        var builder = new StringBuilder();
+        static int GetNumberOfRotates(int index) => index / Alphabet.Length;
 
-        foreach (var character in text)
-        {
-            if (!Alphabet.Contains(char.ToLower(character)))
-            {
-                builder.Append(character);
-                continue;
-            }
+        static int RemoveRedundantRotates(int index) => index - Alphabet.Length * GetNumberOfRotates(index);
 
-            var shiftedIndex = Alphabet.IndexOf(char.ToLower(character)) + shiftKey;
-            var newCharacterPosition = RemoveRedundantRotates(shiftedIndex);
-            var cypheredCharacter = GetNewCharacter(newCharacterPosition, char.IsLower(character));
+        static char GetNewCharacter(int characterPosition, bool isLower) =>
+            isLower
+                ? Alphabet[characterPosition]
+                : char.ToUpper(Alphabet[characterPosition]);
 
-            builder.Append(cypheredCharacter);
-        }
-
-        return builder.ToString();
+        var shiftedIndex = Alphabet.IndexOf(char.ToLower(character)) + shiftKey;
+        var newCharacterPosition = RemoveRedundantRotates(shiftedIndex);
+        return GetNewCharacter(newCharacterPosition, char.IsLower(character));
     }
 
-    private static char GetNewCharacter(int characterPosition, bool isLower)
-        => isLower
-            ? Alphabet[characterPosition]
-            : char.ToUpper(Alphabet[characterPosition]);
-
-    private static int RemoveRedundantRotates(int index)
-    {
-        int GetNumberOfRotates() => index / Alphabet.Length;
-
-        return index - Alphabet.Length * GetNumberOfRotates();
-    }
+    public static string Rotate(string text, int shiftKey) =>
+        text.Aggregate(new StringBuilder(), (result, character) =>
+            result.Append(
+                !Alphabet.Contains(char.ToLower(character))
+                    ? character
+                    : CypherCharacter(character, shiftKey))
+            ).ToString();
 }
