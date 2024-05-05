@@ -1,20 +1,10 @@
 using System;
 
-public class SpaceAge
+public class SpaceAge(int seconds)
 {
     private const int EarthPeriod = 31557600;
 
-    private readonly long seconds;
-
-    public SpaceAge(long seconds)
-    {
-        this.seconds = seconds;
-    }
-
-    private double CalculateAge(double period)
-    {
-        return Math.Round(seconds / (EarthPeriod * period), digits: 2);
-    }
+    private double CalculateAge(double period) => Math.Round(seconds / (EarthPeriod * period), digits: 2);
 
     public double OnEarth() => CalculateAge(period: 1);
 
