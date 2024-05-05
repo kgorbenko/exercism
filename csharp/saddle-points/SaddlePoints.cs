@@ -26,6 +26,6 @@ public static class SaddlePoints
         var minValuesInColumns = GetColumns(matrix).Select(x => x.Min()).ToArray();
 
         return GetIndexes(matrix).Where(x => maxValuesInRows[x.i] == minValuesInColumns[x.j])
-                                .Select(x => (x.i + 1, x.j + 1));
+                                 .Select(x => (x.i + 1, x.j + 1));
     }
 }
